@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, defineProps, onMounted } from 'vue';
+    import { ref, defineProps, onMounted, defineEmits } from 'vue';
     import Tag from './Tag.vue';
 
 
@@ -17,26 +17,17 @@
             ])
         }
     });
+    const emit = defineEmits(['done']);
     
     const listRef = ref(null);
 
     onMounted(() => {
-        //animation or something
-        // appendListItem();
         listRef.value = props.list;
+        const timeout = setTimeout(() => {
+            clearTimeout(timeout);
+            emit('done');
+        }, props.list.length * 200 + 500);
     })
-
-    // const appendListItem = () => {
-    //     if(!listRef.value) return;
-    //     listRef.value = [];
-    //     const interval = setInterval(() => {
-    //         if(listRef.value.length >= props.list.length) {
-    //             clearInterval(interval);
-    //             return;
-    //         }
-    //         listRef.value.push(props.list[listRef.value.length]);
-    //     }, 200);
-    // }
 </script>
 
 <template>

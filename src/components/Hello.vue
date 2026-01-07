@@ -68,7 +68,7 @@
 
 <template>
     <h1 
-    class="text-8xl font-bold tracking-widest
+    class="lg:text-8xl text-5xl font-bold tracking-widest
     text-gray-200 pb-4 relative"
     :class="[{
         'block': isHeadingDone,
@@ -88,9 +88,9 @@
     {{ descriptionRef }}
         <span 
         v-show="!isPenWait"
-        class="w-6 h-1 bg-white absolute bottom-0 -right-8"
+        class="w-6 h-1 bg-white absolute bottom-0 lg:-right-8"
         :class="[{
-            'wait-blink': isDescriptionDone
+            'wait-blink right-32': isDescriptionDone
         }]"
         ></span>
     </p>

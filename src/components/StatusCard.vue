@@ -103,11 +103,12 @@
 </script>
 
 <template>
-    <div class="card-animate grid grid-cols-4 bg-white/10 border border-gray-300 p-4 py-6 my-4 rounded-md">
-        <div class="col-span-1">
+    <div class="card-animate grid grid-cols-4 bg-white/10 border border-gray-300 lg:p-4 p-1 py-6 my-4 rounded-md
+    lg:text-md text-sm">
+        <div class="lg:col-span-1 hidden lg:flex justify-center items-center">
             <img src="/cv.svg" alt="">
         </div>
-        <div class="col-span-3 text-gray-300 px-4">
+        <div class="lg:col-span-3 col-span-4 text-gray-300 px-4">
             <h3>Full name: <span ref="fullNameStyle">{{ fullNameRef.data }}</span></h3>
             <h3>Profession: <span ref="professionStyle" >{{ professionRef.data }}</span></h3>
             <h3>Location: <span ref="locationStyle">{{ locationRef.data }}</span></h3>

@@ -22,7 +22,7 @@
         },
         description: {
             type: String,
-            default: `I'm graduated from <span class="text-emerald-500">Can Tho University</span> with a degree in <span class="text-red-500">Software Engineering</span>.`
+            default: `I'm graduated from <span class="text-sky-500">Can Tho University</span> with a degree in <span class="text-red-500">Software Engineering</span>.`
         }
     });
 

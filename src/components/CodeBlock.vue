@@ -142,7 +142,7 @@ const keybind = (e) => {
             'cursor-grabbing': isDragging
         }]" class="my-1 drag-handle flex justify-between items-center">
             <h1 class="uppercase text-gray-200 text-xs font-semibold">Command block</h1>
-            <div class="flex-grow">
+            <div class="">
                 <button @click="submitCode" type="primary">Run</button>
             </div>
         </div>

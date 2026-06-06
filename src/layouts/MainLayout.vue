@@ -6,7 +6,7 @@
 
 <template>
     <div class="relative">
-        <CodeBlock class="hidden"/>
+        <CodeBlock />
         <SupportBlock/>
         <router-view></router-view>
         <DynamicOptions/>

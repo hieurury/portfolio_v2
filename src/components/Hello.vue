@@ -1,5 +1,6 @@
 <script setup>
     import { defineProps, ref, onMounted, watch, defineEmits } from 'vue';
+
     const props = defineProps({
         title: {
             type: String,
@@ -67,33 +68,17 @@
 </script>
 
 <template>
-    <h1 
-    class="lg:text-8xl text-5xl font-bold tracking-widest
-    text-gray-200 pb-4 relative"
-    :class="[{
-        'block': isHeadingDone,
-        'inline-block': !isHeadingDone || isPenWait
-    }]"
-    >{{ headingRef }}
-        <span 
-        v-show="isPenWait" 
-        class="w-10 h-2 bg-white absolute bottom-4 -right-6"
-        :class="[{
-            'wait-blink': isHeadingDone
-        }]"></span>
-    </h1>
-    <p 
-    class="text-3xl text-gray-300 relative inline-block"
-    >
-    {{ descriptionRef }}
-        <span 
-        v-show="!isPenWait"
-        class="w-6 h-1 bg-white absolute bottom-0 lg:-right-8"
-        :class="[{
-            'wait-blink right-32': isDescriptionDone
-        }]"
-        ></span>
-    </p>
+    <div class="mb-4 min-h-[4rem] lg:min-h-[7rem]">
+        <h1 class="lg:text-8xl text-5xl font-bold tracking-widest text-gray-200 inline break-words">
+            {{ headingRef }}<span v-show="isPenWait" class="inline-block w-8 lg:w-12 h-[6px] lg:h-[8px] bg-white ml-2 align-baseline" :class="[{ 'wait-blink': isHeadingDone }]"></span>
+        </h1>
+    </div>
+    
+    <div class="min-h-[2.5rem]">
+        <p class="text-3xl text-gray-300 inline break-words">
+            {{ descriptionRef }}<span v-show="!isPenWait" class="inline-block w-4 lg:w-6 h-[4px] bg-white ml-1 align-baseline" :class="[{ 'wait-blink': isDescriptionDone }]"></span>
+        </p>
+    </div>
 </template>
 
 <style scoped>

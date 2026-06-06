@@ -2,6 +2,8 @@ import { ref, onMounted, watch } from "vue";
 
 const showSupport = ref(false);
 const showRules = ref(false);
+const isAutoPlay = ref(false);
+const showTerminal = ref(false);
 
 const useState = () => {
     const setShowSupport = (value) => {
@@ -11,11 +13,24 @@ const useState = () => {
     const setShowRules = (value) => {
         showRules.value = value;
     };
+
+    const toggleAutoPlay = () => {
+        isAutoPlay.value = !isAutoPlay.value;
+    };
+
+    const toggleTerminal = () => {
+        showTerminal.value = !showTerminal.value;
+    };
+
     return {
         showSupport,
         setShowSupport,
         showRules,
-        setShowRules
+        setShowRules,
+        isAutoPlay,
+        toggleAutoPlay,
+        showTerminal,
+        toggleTerminal
     };
 };
 

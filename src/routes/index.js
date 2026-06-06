@@ -17,12 +17,12 @@ const routes = [
         children: [
             {
                 path: '',
-                name: 'FirstSlide',
+                name: 'first',
                 component: FirstSlide
             },
             {
                 path: 'second',
-                name: 'SecondSlide',
+                name: 'second',
                 component: SecondSlide
             }
         ]

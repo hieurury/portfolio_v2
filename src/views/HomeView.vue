@@ -20,11 +20,9 @@
 
 
 <template>
-    <CodeBlock class="hidden"/>
-    <SupportBlock/>
     <div ref="slidesContainer" class="flex flex-row min-h-screen overflow-x-hidden">
         <div id="first" class="w-full shrink-0 bg-black/90">
-            <!-- <FirstSlide/> -->
+            <FirstSlide/>
         </div>
         <div id="second" class="w-full shrink-0 bg-black/90">
         </div>

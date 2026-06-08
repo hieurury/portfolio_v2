@@ -347,6 +347,7 @@ const regexCommand = (command) => {
             }
             if (trimmed === 'true') return true;
             if (trimmed === 'false') return false;
+            if (!isNaN(trimmed) && trimmed !== '') return Number(trimmed);
             return trimmed;
         });
     }

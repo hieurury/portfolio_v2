@@ -3,12 +3,14 @@ import { onMounted, onUnmounted, ref, nextTick, watch } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Icon } from '@iconify/vue';
+import { useRouter } from 'vue-router';
 import { useState } from '../hooks/useState.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const { isAutoPlay } = useState();
 const autoPlayTimeout = ref(null);
+const router = useRouter();
 
 const scrollContainer = ref(null);
 const sectionsRef = ref([]);
@@ -21,10 +23,15 @@ watch(isAutoPlay, (newVal) => {
         const typed = typedMilestones.value[currentIndex.value];
         const isTypedComplete = typed.title === currentMilestone.title && typed.description === currentMilestone.description;
 
-        if (isTypedComplete && currentIndex.value < milestones.length - 1) {
+        if (isTypedComplete) {
             clearTimeout(autoPlayTimeout.value);
             autoPlayTimeout.value = setTimeout(() => {
-                if (isAutoPlay.value) scrollTo(currentIndex.value + 1);
+                if (!isAutoPlay.value) return;
+                if (currentIndex.value < milestones.length - 1) {
+                    scrollTo(currentIndex.value + 1);
+                } else {
+                    router.push('/experience');
+                }
             }, 1200);
         }
     } else {
@@ -42,7 +49,7 @@ const milestones = [
         lineColor: 'bg-orange-500',
         shadow: 'shadow-orange-500',
         flare: 'via-orange-500/10',
-        image: '/second/second-1.png',
+        image: '/timeline/second-1.png',
         rotation: '-rotate-3'
     },
     {
@@ -54,7 +61,7 @@ const milestones = [
         lineColor: 'bg-red-500',
         shadow: 'shadow-red-500',
         flare: 'via-red-500/10',
-        image: '/second/second-2.png',
+        image: '/timeline/second-2.png',
         rotation: '-rotate-4'
     },
     {
@@ -66,7 +73,7 @@ const milestones = [
         lineColor: 'bg-green-500',
         shadow: 'shadow-green-500',
         flare: 'via-green-500/10',
-        image: '/second/second-3.png',
+        image: '/timeline/second-3.png',
         rotation: 'rotate-2'
     },
     {
@@ -78,7 +85,7 @@ const milestones = [
         lineColor: 'bg-purple-500',
         shadow: 'shadow-purple-500',
         flare: 'via-purple-500/10',
-        image: '/second/second-4.png',
+        image: '/timeline/second-4.png',
         rotation: '-rotate-2'
     },
     {
@@ -90,7 +97,7 @@ const milestones = [
         lineColor: 'bg-emerald-500',
         shadow: 'shadow-emerald-500',
         flare: 'via-emerald-500/10',
-        image: '/second/second-5.png',
+        image: '/timeline/second-5.png',
         rotation: 'rotate-3'
     },
     {
@@ -102,7 +109,7 @@ const milestones = [
         lineColor: 'bg-sky-500',
         shadow: 'shadow-sky-500',
         flare: 'via-sky-500/10',
-        image: '/second/second-6.png',
+        image: '/timeline/second-6.png',
         rotation: '-rotate-6'
     }
 ];
@@ -179,23 +186,28 @@ onMounted(() => {
                             const nextBtn = section.querySelector('.next-section-btn');
                             if (nextBtn) {
                                 gsap.fromTo(nextBtn, 
-                                    { opacity: 0, y: 20 }, 
-                                    { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.7)' }
+                                    { opacity: 0, y: 20, pointerEvents: 'none' }, 
+                                    { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.6, ease: 'back.out(1.7)' }
                                 );
                             }
                             const prevBtn = section.querySelector('.prev-section-btn');
                             if (prevBtn) {
                                 gsap.fromTo(prevBtn, 
-                                    { opacity: 0, y: -20 }, 
-                                    { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.7)' }
+                                    { opacity: 0, y: -20, pointerEvents: 'none' }, 
+                                    { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.6, ease: 'back.out(1.7)' }
                                 );
                             }
                             
                             // AutoPlay transition cho SecondSlide (Đợi 1.2s sau khi gõ xong)
-                            if (isAutoPlay.value && index < milestones.length - 1) {
+                            if (isAutoPlay.value) {
                                 clearTimeout(autoPlayTimeout.value);
                                 autoPlayTimeout.value = setTimeout(() => {
-                                    if (isAutoPlay.value) scrollTo(index + 1);
+                                    if (!isAutoPlay.value) return;
+                                    if (index < milestones.length - 1) {
+                                        scrollTo(index + 1);
+                                    } else {
+                                        router.push('/experience');
+                                    }
                                 }, 1200);
                             }
                         });
@@ -207,10 +219,10 @@ onMounted(() => {
                     if (lineEl) gsap.to(lineEl, { scaleY: 0, duration: 0.4, overwrite: 'auto' });
                     
                     const nextBtn = section.querySelector('.next-section-btn');
-                    if (nextBtn) gsap.to(nextBtn, { opacity: 0, y: 20, duration: 0.3, overwrite: 'auto' });
+                    if (nextBtn) gsap.to(nextBtn, { opacity: 0, y: 20, pointerEvents: 'none', duration: 0.3, overwrite: 'auto' });
                     
                     const prevBtn = section.querySelector('.prev-section-btn');
-                    if (prevBtn) gsap.to(prevBtn, { opacity: 0, y: -20, duration: 0.3, overwrite: 'auto' });
+                    if (prevBtn) gsap.to(prevBtn, { opacity: 0, y: -20, pointerEvents: 'none', duration: 0.3, overwrite: 'auto' });
 
                     clearTextIntervals(index);
                     typedMilestones.value[index].title = '';
@@ -223,10 +235,10 @@ onMounted(() => {
                     typedMilestones.value[index].description = milestones[index].description;
                     
                     const nextBtn = section.querySelector('.next-section-btn');
-                    if (nextBtn) gsap.to(nextBtn, { opacity: 1, y: 0, duration: 0, overwrite: 'auto' });
+                    if (nextBtn) gsap.to(nextBtn, { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0, overwrite: 'auto' });
                     
                     const prevBtn = section.querySelector('.prev-section-btn');
-                    if (prevBtn) gsap.to(prevBtn, { opacity: 1, y: 0, duration: 0, overwrite: 'auto' });
+                    if (prevBtn) gsap.to(prevBtn, { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0, overwrite: 'auto' });
                 },
 
                 onEnterBack: () => {
@@ -251,23 +263,28 @@ onMounted(() => {
                             const nextBtn = section.querySelector('.next-section-btn');
                             if (nextBtn) {
                                 gsap.fromTo(nextBtn, 
-                                    { opacity: 0, y: 20 }, 
-                                    { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.7)' }
+                                    { opacity: 0, y: 20, pointerEvents: 'none' }, 
+                                    { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.6, ease: 'back.out(1.7)' }
                                 );
                             }
                             const prevBtn = section.querySelector('.prev-section-btn');
                             if (prevBtn) {
                                 gsap.fromTo(prevBtn, 
-                                    { opacity: 0, y: -20 }, 
-                                    { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.7)' }
+                                    { opacity: 0, y: -20, pointerEvents: 'none' }, 
+                                    { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.6, ease: 'back.out(1.7)' }
                                 );
                             }
                             
                             // AutoPlay transition cho SecondSlide (Đợi 1.2s sau khi gõ xong)
-                            if (isAutoPlay.value && index < milestones.length - 1) {
+                            if (isAutoPlay.value) {
                                 clearTimeout(autoPlayTimeout.value);
                                 autoPlayTimeout.value = setTimeout(() => {
-                                    if (isAutoPlay.value) scrollTo(index + 1);
+                                    if (!isAutoPlay.value) return;
+                                    if (index < milestones.length - 1) {
+                                        scrollTo(index + 1);
+                                    } else {
+                                        router.push('/experience');
+                                    }
                                 }, 1200);
                             }
                         });
@@ -349,14 +366,14 @@ onUnmounted(() => {
                             
                             <!-- Nút Trở Lại (Chỉ hiển thị nút ẩn cho Slide đầu tiên) -->
                             <div v-if="index === 0" class="absolute -top-6 left-8 sm:left-12 z-50">
-                                <router-link to="/" class="prev-section-btn opacity-0 px-8 py-3 bg-orange-500 text-white font-extrabold rounded-full shadow-[0_0_20px_var(--tw-shadow-color)] shadow-orange-500/50 hover:bg-orange-400 hover:scale-105 transition-all flex items-center gap-2">
+                                <router-link to="/" class="prev-section-btn opacity-0 pointer-events-none px-8 py-3 bg-orange-500 text-white font-extrabold rounded-full shadow-[0_0_20px_var(--tw-shadow-color)] shadow-orange-500/50 hover:bg-orange-400 hover:scale-105 transition-all flex items-center gap-2">
                                     <Icon icon="material-symbols:arrow-back-rounded" class="w-6 h-6"/> Trở lại
                                 </router-link>
                             </div>
 
                             <!-- Nút Chuyển Tiếp (Chỉ hiển thị nút ẩn cho Slide cuối) -->
                             <div v-if="index === milestones.length - 1" class="absolute -bottom-6 right-8 sm:right-12 z-50">
-                                <router-link to="/third" class="next-section-btn opacity-0 px-8 py-3 bg-sky-500 text-white font-extrabold rounded-full shadow-[0_0_20px_var(--tw-shadow-color)] shadow-sky-500/50 hover:bg-sky-400 hover:scale-105 transition-all flex items-center gap-2">
+                                <router-link to="/experience" class="next-section-btn opacity-0 pointer-events-none px-8 py-3 bg-sky-500 text-white font-extrabold rounded-full shadow-[0_0_20px_var(--tw-shadow-color)] shadow-sky-500/50 hover:bg-sky-400 hover:scale-105 transition-all flex items-center gap-2">
                                     Tiếp tục <Icon icon="material-symbols:arrow-forward-rounded" class="w-6 h-6"/>
                                 </router-link>
                             </div>
@@ -380,7 +397,7 @@ onUnmounted(() => {
                             
                             <!-- Nút Chuyển Tiếp -->
                             <div v-if="index === milestones.length - 1" class="absolute -bottom-6 left-8 sm:left-12 z-50">
-                                <router-link to="/third" class="next-section-btn opacity-0 px-8 py-3 bg-sky-500 text-white font-extrabold rounded-full shadow-[0_0_20px_var(--tw-shadow-color)] shadow-sky-500/50 hover:bg-sky-400 hover:scale-105 transition-all flex items-center gap-2">
+                                <router-link to="/experience" class="next-section-btn opacity-0 pointer-events-none px-8 py-3 bg-sky-500 text-white font-extrabold rounded-full shadow-[0_0_20px_var(--tw-shadow-color)] shadow-sky-500/50 hover:bg-sky-400 hover:scale-105 transition-all flex items-center gap-2">
                                     Tiếp tục <Icon icon="material-symbols:arrow-forward-rounded" class="w-6 h-6"/>
                                 </router-link>
                             </div>

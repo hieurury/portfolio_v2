@@ -30,7 +30,7 @@
         if (newVal && isRightSlideDone.value) {
             clearTimeout(autoPlayTimeout);
             autoPlayTimeout = setTimeout(() => {
-                if (isAutoPlay.value) router.push('/second');
+                if (isAutoPlay.value) router.push('/timeline');
             }, 1200);
         } else if (!newVal) {
             clearTimeout(autoPlayTimeout);
@@ -62,7 +62,7 @@
                         isRightSlideDone.value = true;
                         if (isAutoPlay.value) {
                             autoPlayTimeout = setTimeout(() => {
-                                if (isAutoPlay.value) router.push('/second');
+                                if (isAutoPlay.value) router.push('/timeline');
                             }, 1200);
                         }
                     }
@@ -145,7 +145,7 @@
                 <h3 class="lg:text-6xl text-4xl font-extrabold text-white mb-4 tracking-tighter ml-12 lg:ml-20">Next step!</h3>
                 <p class="text-lg text-gray-400 leading-relaxed mb-12 ml-12 lg:ml-20">Continue your journey</p>
                 
-                <router-link to="/second" class="ml-12 lg:ml-20 px-12 py-4 bg-sky-500 text-white font-extrabold rounded-full shadow-[0_0_20px_var(--tw-shadow-color)] shadow-sky-500/50 hover:bg-sky-400 hover:scale-110 transition-all flex items-center justify-center">
+                <router-link to="/timeline" class="ml-12 lg:ml-20 px-12 py-4 bg-sky-500 text-white font-extrabold rounded-full shadow-[0_0_20px_var(--tw-shadow-color)] shadow-sky-500/50 hover:bg-sky-400 hover:scale-110 transition-all flex items-center justify-center">
                     <Icon class="text-white" icon="material-symbols:arrow-forward-rounded" width="36" height="36" />
                 </router-link>
 

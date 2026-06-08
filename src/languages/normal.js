@@ -120,25 +120,108 @@ const METHODS = {
             if (args.length > 0) return { type: 'warning', message: 'Lệnh này không nhận tham số.' };
             const path = router.currentRoute.value.path;
             if (path === '/') {
-                await router.push('/second');
-                return { type: 'success', message: 'Đã chuyển đến phần tiếp theo (SecondSlide).' };
-            } else if (path === '/second') {
-                await router.push('/third');
-                return { type: 'success', message: 'Đã chuyển đến phần tiếp theo (ThirdSlide).' };
+                await router.push('/timeline');
+                return { type: 'success', message: 'Đã chuyển đến phần tiếp theo (Timeline).' };
+            } else if (path === '/timeline') {
+                await router.push('/experience');
+                return { type: 'success', message: 'Đã chuyển đến phần tiếp theo (Experience).' };
             }
             return { type: 'warning', message: 'Không còn trang tiếp theo.' };
         },
         previous: async (...args) => {
             if (args.length > 0) return { type: 'warning', message: 'Lệnh này không nhận tham số.' };
             const path = router.currentRoute.value.path;
-            if (path === '/second') {
+            if (path === '/timeline') {
                 await router.push('/');
-                return { type: 'success', message: 'Đã quay lại phần trước (FirstSlide).' };
-            } else if (path === '/third') {
-                await router.push('/second');
-                return { type: 'success', message: 'Đã quay lại phần trước (SecondSlide).' };
+                return { type: 'success', message: 'Đã quay lại phần trước (Overview).' };
+            } else if (path === '/experience') {
+                await router.push('/timeline');
+                return { type: 'success', message: 'Đã quay lại phần trước (Timeline).' };
             }
             return { type: 'warning', message: 'Không có trang trước đó.' };
+        }
+    },
+    game: {
+        help: () => {
+            return [
+                {
+                    command: 'autoGacha',
+                    description: 'Tự động quay Gacha cho đến khi hết thẻ.',
+                    usage: [
+                        { arg: "true", description: 'Bật tự động quay.' },
+                        { arg: "false", description: 'Tắt tự động quay.' }
+                    ]
+                },
+                {
+                    command: 'gacha',
+                    description: 'Thực hiện 1 lần quay Gacha.',
+                    usage: [{ arg: "", description: 'Quay Gacha.' }]
+                },
+                {
+                    command: 'unlockGacha',
+                    description: 'Mở khoá 1 thẻ Gacha theo ID.',
+                    usage: [{ arg: "1", description: 'Mở khoá thẻ số 1.' }]
+                },
+                {
+                    command: 'unlockAllGacha',
+                    description: 'Mở khoá tất cả thẻ Gacha.',
+                    usage: [{ arg: "", description: 'Mở khoá toàn bộ.' }]
+                },
+                {
+                    command: 'resetGacha',
+                    description: 'Đóng lại tất cả thẻ Gacha.',
+                    usage: [{ arg: "", description: 'Reset toàn bộ.' }]
+                }
+            ];
+        },
+        autoGacha: (bool, ...rest) => {
+            if (router.currentRoute.value.path !== '/experience') return { type: 'error', message: 'Lệnh chỉ khả dụng ở trang Experience (Kinh nghiệm).' };
+            if (rest.length > 0 || typeof bool !== 'boolean') return { type: 'warning', message: 'Tham số phải là boolean (true/false).' };
+            if (window.gameActions) {
+                window.gameActions.autoGacha(bool);
+                return { type: 'success', message: bool ? 'Đã bật Auto Gacha.' : 'Đã tắt Auto Gacha.' };
+            }
+            return { type: 'error', message: 'Game actions chưa được khởi tạo.' };
+        },
+        gacha: (...args) => {
+            if (router.currentRoute.value.path !== '/experience') return { type: 'error', message: 'Lệnh chỉ khả dụng ở trang Experience (Kinh nghiệm).' };
+            if (args.length > 0) return { type: 'warning', message: 'Lệnh không nhận tham số.' };
+            if (window.gameActions) {
+                if (window.gameActions.isAutoGachaMode()) return { type: 'warning', message: 'Hệ thống đang Auto Gacha. Vui lòng tắt (game.autoGacha(false)) trước khi sử dụng lệnh này.' };
+                window.gameActions.gacha();
+                return { type: 'success', message: 'Đang thực hiện Gacha...' };
+            }
+            return { type: 'error', message: 'Game actions chưa được khởi tạo.' };
+        },
+        unlockGacha: (num, ...rest) => {
+            if (router.currentRoute.value.path !== '/experience') return { type: 'error', message: 'Lệnh chỉ khả dụng ở trang Experience (Kinh nghiệm).' };
+            if (rest.length > 0 || typeof num !== 'number') return { type: 'warning', message: 'Tham số phải là một số (number).' };
+            if (window.gameActions) {
+                if (window.gameActions.isAutoGachaMode()) return { type: 'warning', message: 'Hệ thống đang Auto Gacha. Vui lòng tắt (game.autoGacha(false)) trước khi sử dụng lệnh này.' };
+                window.gameActions.unlockGacha(num);
+                return { type: 'success', message: `Đã mở khoá thẻ #${num}.` };
+            }
+            return { type: 'error', message: 'Game actions chưa được khởi tạo.' };
+        },
+        unlockAllGacha: (...args) => {
+            if (router.currentRoute.value.path !== '/experience') return { type: 'error', message: 'Lệnh chỉ khả dụng ở trang Experience (Kinh nghiệm).' };
+            if (args.length > 0) return { type: 'warning', message: 'Lệnh không nhận tham số.' };
+            if (window.gameActions) {
+                if (window.gameActions.isAutoGachaMode()) return { type: 'warning', message: 'Hệ thống đang Auto Gacha. Vui lòng tắt (game.autoGacha(false)) trước khi sử dụng lệnh này.' };
+                window.gameActions.unlockAllGacha();
+                return { type: 'success', message: 'Đã mở khoá tất cả các thẻ.' };
+            }
+            return { type: 'error', message: 'Game actions chưa được khởi tạo.' };
+        },
+        resetGacha: (...args) => {
+            if (router.currentRoute.value.path !== '/experience') return { type: 'error', message: 'Lệnh chỉ khả dụng ở trang Experience (Kinh nghiệm).' };
+            if (args.length > 0) return { type: 'warning', message: 'Lệnh không nhận tham số.' };
+            if (window.gameActions) {
+                if (window.gameActions.isAutoGachaMode()) return { type: 'warning', message: 'Hệ thống đang Auto Gacha. Vui lòng tắt (game.autoGacha(false)) trước khi sử dụng lệnh này.' };
+                window.gameActions.resetGacha();
+                return { type: 'success', message: 'Đã reset lại tất cả thẻ Gacha.' };
+            }
+            return { type: 'error', message: 'Game actions chưa được khởi tạo.' };
         }
     },
     redirect: {

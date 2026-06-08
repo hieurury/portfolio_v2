@@ -6,8 +6,9 @@ import MainLayout from '../layouts/MainLayout.vue'
 //views
 import Home from '../views/HomeView.vue'
 import Gsap from '../views/GsapView.vue'
-import FirstSlide from '../views/FirstSlide.vue'
-import SecondSlide from '../views/SecondSlide.vue'
+import Overview from '../views/Overview.vue'
+import Timeline from '../views/Timeline.vue'
+import Experience from '../views/Experience.vue'
 
 const routes = [
     {
@@ -17,13 +18,18 @@ const routes = [
         children: [
             {
                 path: '',
-                name: 'first',
-                component: FirstSlide
+                name: 'overview',
+                component: Overview
             },
             {
-                path: 'second',
-                name: 'second',
-                component: SecondSlide
+                path: 'timeline',
+                name: 'timeline',
+                component: Timeline
+            },
+            {
+                path: 'experience',
+                name: 'experience',
+                component: Experience
             }
         ]
     },
